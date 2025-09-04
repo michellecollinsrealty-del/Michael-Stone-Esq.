@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR Kit — Print Cards & Real QR Codes</title><link rel="stylesheet" href="2_styles.css"></head>
+<body>
+<header class="site-header"><div class="wrap"><div class="brand"><div class="logo">MS</div><div class="name"><h1>QR Kit</h1><p class="sub">Real QR codes (offline after first load)</p></div></div>
+<nav class="nav"><a href="1_index.html" class="btn soft">Home</a></nav></div></header>
+
+<section class="section"><div class="wrap">
+  <h3>Generate QR Codes</h3>
+  <p class="lead">Enter your final live URL and create real, scannable QR codes. This tool caches itself for offline use after the first time it loads online.</p>
+  <div class="card">
+    <label>Your live URL<input id="liveUrl" placeholder="https://your-domain.netlify.app/" /></label>
+    <div class="grid-2" style="margin-top:12px">
+      <div class="card"><h4>QR Preview</h4><div id="qrcode" style="padding:8px;background:#fff;border-radius:12px;"></div></div>
+      <div class="card"><h4>Download</h4><p><button class="btn teal" id="dlPng">Download PNG</button> <button class="btn" id="dlSvg">Download SVG</button></p>
+        <p class="small">Tip: Use SVG for sharp print on books.</p></div>
+    </div>
+    <p class="small" id="qrStatus"></p>
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <h3>Printable Promo Cards</h3>
+  <p>If you're offline and haven't cached the QR library yet, use these cards. Once you reconnect and open this page, the QR tool will cache and work offline forever.</p>
+  <div class="card">
+    <button class="btn soft" id="makeCards">Generate printable sheet</button>
+    <div id="cardsOut" class="card" style="margin-top:12px"></div>
+  </div>
+</div></section>
+
+<footer class="site-footer"><div class="wrap"><div class="cols">
+  <div><h4>Pro tip</h4><p>Add your site to Home Screen for one-tap access.</p></div>
+  <div><h4>Next</h4><p><a href="11_media.html">Media Kit</a></p></div>
+</div></div></footer>
+
+<script>
+// Load QR library (qrcode-generator) from CDN on first use; SW will cache the file for offline thereafter.
+function loadQrLib(){
+  return new Promise((resolve,reject)=>{
+    if(window.qrcode){ resolve(); return; }
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js';
+    s.onload=()=>resolve();
+    s.onerror=()=>reject(new Error('QR library failed to load.'));
+    document.head.appendChild(s);
+  });
+}
+
+const statusEl=document.getElementById('qrStatus');
+const urlEl=document.getElementById('liveUrl');
+const qrEl=document.getElementById('qrcode');
+
+async function renderQR(){
+  const url=(urlEl.value||'').trim();
+  if(!url){qrEl.innerHTML=''; statusEl.textContent=''; return;}
+  try{
+    await loadQrLib();
+    // pick typeNumber auto: try 0 (auto) with medium error correction
+    const qr = qrcode(0, 'M');
+    qr.addData(url);
+    qr.make();
+    qrEl.innerHTML = qr.createSvgTag({cellSize:4, margin:2});
+    statusEl.textContent='QR ready. You can download as PNG or SVG.';
+  }catch(e){
+    statusEl.textContent='Offline and QR engine not cached yet. Generate printable cards below, then revisit this page once online to cache the QR engine for offline use.';
+  }
+}
+
+urlEl.addEventListener('input', renderQR);
+window.addEventListener('load', renderQR);
+
+// Download PNG by rasterizing the SVG
+document.getElementById('dlPng').onclick=()=>{
+  const svg=qrEl.querySelector('svg');
+  if(!svg){alert('Create a QR first.');return;}
+  const xml = new XMLSerializer().serializeToString(svg);
+  const img = new Image(); const svg64 = btoa(unescape(encodeURIComponent(xml)));
+  img.onload = function(){
+    const c = document.createElement('canvas'); c.width=img.width; c.height=img.height;
+    const ctx=c.getContext('2d'); ctx.drawImage(img,0,0);
+    const a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download='qr.png'; a.click();
+  };
+  img.src = 'data:image/svg+xml;base64,'+svg64;
+};
+
+// Download SVG
+document.getElementById('dlSvg').onclick=()=>{
+  const svg=qrEl.querySelector('svg');
+  if(!svg){alert('Create a QR first.');return;}
+  const xml = new XMLSerializer().serializeToString(svg);
+  const blob = new Blob([xml], {type:'image/svg+xml'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='qr.svg'; a.click();
+};
+
+// Printable cards fallback
+document.getElementById('makeCards').onclick=()=>{
+  const url=(urlEl.value||'').trim();
+  if(!url){alert('Enter your live URL first.'); return;}
+  const html = `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">` +
+    Array.from({length:6}).map(()=>`<div style="border:1px solid #ddd;padding:12px;border-radius:12px;background:#fff">
+      <div style="font-weight:900;margin-bottom:6px">Michael Stone PMA — Education Hub</div>
+      <div style="font-size:.95rem">${url}</div>
+      <div style="margin-top:8px;color:#6f7a83;font-size:.85rem">Scan QR or type the link.</div>
+    </div>`).join('') + `</div>`;
+  document.getElementById('cardsOut').innerHTML = html + '<p class="small">Print this page (Ctrl/Cmd+P).</p>';
+};
+</script>
+</body></html>

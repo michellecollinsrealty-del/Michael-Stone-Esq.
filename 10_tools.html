@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Offline Tools</title><link rel="stylesheet" href="2_styles.css"></head><body>
+<header class="site-header"><div class="wrap"><div class="brand"><div class="logo">MS</div><div class="name"><h1>Offline Tools</h1><p class="sub">Local storage · No servers</p></div></div>
+<nav class="nav"><a href="1_index.html" class="btn soft">Home</a></nav></div></header>
+<section class="section"><div class="wrap"><div class="grid-2">
+<div class="card"><h4>Evidence & Notes</h4><label>Note<textarea id="note" rows="6" style="width:100%"></textarea></label><p><a class="btn" id="saveNote">Save</a></p><p class="kicker">Stored only on this device.</p></div>
+<div class="card"><h4>Saved Notes</h4><ul id="notesList"></ul><a class="btn soft" id="exportNotes">Export .json</a></div>
+</div>
+<div class="grid-2" style="margin-top:16px">
+<div class="card"><h4>Payments & Receipts</h4><label>Reference<input id="rcptRef"></label><label>Amount<input id="rcptAmt"></label><p><a class="btn" id="saveRcpt">Save receipt</a></p></div>
+<div class="card"><h4>Saved Receipts</h4><ul id="rcptList"></ul><a class="btn soft" id="exportRcpt">Export .json</a></div>
+</div>
+<div class="grid-2" style="margin-top:16px">
+<div class="card"><h4>Export PMA Signups</h4><p><a class="btn" id="exportMembers">Export .json</a></p></div>
+<div class="card"><h4>Tips</h4><p class="kicker">Add this site to your Home Screen for offline use.</p></div>
+</div>
+</div></section>
+<script>
+const NOTES_KEY='ms_notes', RCPT_KEY='ms_receipts', MEMBERS_KEY='ms_pma_members';
+function renderList(key, ulId){const arr=JSON.parse(localStorage.getItem(key)||'[]');const ul=document.getElementById(ulId);ul.innerHTML='';arr.forEach(it=>{const li=document.createElement('li');li.textContent=typeof it==='string'?it:JSON.stringify(it);ul.appendChild(li);});}
+document.getElementById('saveNote').onclick=()=>{const t=document.getElementById('note').value.trim();if(!t){alert('Write a note.');return;}const arr=JSON.parse(localStorage.getItem(NOTES_KEY)||'[]');arr.push({ts:new Date().toISOString(),note:t});localStorage.setItem(NOTES_KEY,JSON.stringify(arr));document.getElementById('note').value='';renderList(NOTES_KEY,'notesList');};
+document.getElementById('exportNotes').onclick=()=>{const data=localStorage.getItem(NOTES_KEY)||'[]';const b=new Blob([data],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='evidence-notes.json';a.click();};
+document.getElementById('saveRcpt').onclick=()=>{const ref=document.getElementById('rcptRef').value.trim();const amt=document.getElementById('rcptAmt').value.trim();if(!ref||!amt){alert('Enter both fields.');return;}const arr=JSON.parse(localStorage.getItem(RCPT_KEY)||'[]');arr.push({ts:new Date().toISOString(),ref,amt});localStorage.setItem(RCPT_KEY', JSON.stringify(arr));};
+</script>
+<script>
+const NOTES_KEY2='ms_notes', RCPT_KEY2='ms_receipts', MEMBERS_KEY2='ms_pma_members';
+function r2(key, ul){const arr=JSON.parse(localStorage.getItem(key)||'[]');ul.innerHTML='';arr.forEach(it=>{const li=document.createElement('li');li.textContent=typeof it==='string'?it:JSON.stringify(it);ul.appendChild(li);});}
+window.addEventListener('load',()=>{
+  r2(NOTES_KEY2, document.getElementById('notesList'));
+  r2(RCPT_KEY2, document.getElementById('rcptList'));
+  document.getElementById('exportRcpt').onclick=()=>{const data=localStorage.getItem(RCPT_KEY2)||'[]';const b=new Blob([data],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='receipts.json';a.click();};
+  document.getElementById('exportMembers').onclick=()=>{const data=localStorage.getItem(MEMBERS_KEY2)||'[]';const b=new Blob([data],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='pma-members.json';a.click();};
+});
+</script>
+</body></html>

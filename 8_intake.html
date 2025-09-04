@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get Help — Intake</title><link rel="stylesheet" href="2_styles.css"></head>
+<body>
+<header class="site-header"><div class="wrap"><div class="brand"><div class="logo">MS</div><div class="name"><h1>Intake & Smart Forms</h1><p class="sub">Autofill declarations · Generate documents</p></div></div>
+<nav class="nav"><a href="1_index.html" class="btn soft">Home</a><a href="7_education.html" class="btn soft">Learn</a></nav></div></header>
+
+<section class="section"><div class="wrap">
+  <h3>Arbitration Demand</h3><p class="small"><img class="avatar" src="23_img_michael.svg" alt="Michael" style="width:36px;height:36px;"> Lead: Michael Stone, Esq.</p>
+  <form class="form" id="arbForm">
+    <div class="row">
+      <input name="claimant" placeholder="Claimant (Your full name)" required>
+      <input name="respondent" placeholder="Respondent (Other party)" required>
+    </div>
+    <input name="contract" placeholder="Agreement/Contract reference (title/date)" required>
+    <textarea name="facts" rows="4" placeholder="Brief facts"></textarea>
+    <textarea name="relief" rows="3" placeholder="Relief sought (e.g., damages, specific performance)"></textarea>
+    <textarea name="clause" rows="2" placeholder="Arbitration clause text (if known)"></textarea>
+    <button class="btn teal">Generate .doc</button>
+  </form>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <h3>Lien Preparation</h3><p class="small"><img class="avatar" src="27_img_chen.svg" alt="Chen" style="width:36px;height:36px;"> Lead: Chen T. (Commercial Instruments)</p>
+  <form class="form" id="lienForm">
+    <div class="row">
+      <input name="creditor" placeholder="Creditor (Your name/PMA)" required>
+      <input name="debtor" placeholder="Debtor (Name/Entity)" required>
+    </div>
+    <input name="basis" placeholder="Basis (Judgment/Award/Statute)" required>
+    <input name="assets" placeholder="Property/Assets (describe)">
+    <div class="row">
+      <input name="amount" placeholder="Amount owed (USD)">
+      <input name="juris" placeholder="Jurisdiction (state/county)">
+    </div>
+    <button class="btn teal">Generate .doc</button>
+  </form>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <h3>Administrative Complaint</h3><p class="small"><img class="avatar" src="24_img_amara.svg" alt="Amara" style="width:36px;height:36px;"> Lead: Amara K. (Admin & Grants)</p>
+  <form class="form" id="admForm">
+    <input name="complainant" placeholder="Complainant (Your full name)" required>
+    <div class="row">
+      <input name="agency" placeholder="Agency (e.g., State Health Dept.)" required>
+      <input name="program" placeholder="Program/Grant (if known)">
+    </div>
+    <textarea name="violation" rows="3" placeholder="Describe the violation"></textarea>
+    <textarea name="evidence" rows="3" placeholder="Evidence summary"></textarea>
+    <textarea name="request" rows="2" placeholder="Requested action (investigate, enforce, etc.)"></textarea>
+    <button class="btn teal">Generate .doc</button>
+  </form>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <h3>Emergency Incident Declaration</h3><p class="small"><img class="avatar" src="25_img_devon.svg" alt="Devon" style="width:36px;height:36px;"> Lead: Devon J. (Torts)</p>
+  <form class="form" id="emgForm">
+    <div class="row">
+      <input name="name" placeholder="Your full name" required>
+      <input name="dt" placeholder="Date & time (ISO or local)" required>
+    </div>
+    <div class="row">
+      <input name="loc" placeholder="Location" required>
+      <input name="type" placeholder="Incident type (e.g., assault, denial of care)" required>
+    </div>
+    <textarea name="desc" rows="4" placeholder="What happened?"></textarea>
+    <textarea name="wit" rows="2" placeholder="Witnesses (names/contacts)"></textarea>
+    <button class="btn accent">Generate .doc</button>
+  </form>
+  <p class="small">Emergency guidance is educational; contact local services if life or safety is at risk.</p>
+</div></section>
+
+<section class="section"><div class="wrap center">
+  <a class="btn" href="9_thankyou.html">After you generate documents, read next steps →</a>
+</div></section>
+
+<footer class="site-footer"><div class="wrap"><div class="cols">
+  <div><h4>Need help?</h4><p>Complete a form above. Save the .doc. Send according to agency/court rules.</p></div>
+  <div><h4>Learn</h4><p><a href="7_education.html">Education Hub</a></p></div>
+  <div><h4>Give</h4><p><a href="1_index.html#pricing">Membership</a></p></div>
+</div></div></footer>
+<script src="3_script.js"></script>
+</body></html>
